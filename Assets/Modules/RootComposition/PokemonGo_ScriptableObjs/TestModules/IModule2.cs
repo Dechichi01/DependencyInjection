@@ -1,7 +1,7 @@
 ﻿
 namespace Modules.RootComposition.PokemonGoScriptableObjs
 {
-    public interface IState2
+    public interface IModule2
     {
         void Log();
 

@@ -7,42 +7,51 @@ using Framework.DI;
 namespace Modules.RootComposition.PokemonGoScriptableObjs
 {
     /*
-    Disadvantages:
-        . Too dependent on monobehaviours
-        . [Inject] attribute goes all over the code, adding dependency to Framework.DI
+    -> Just like PokemonGo, but using scriptable objects
+
     Advantages:
-        . Simple
+        . Still simple
+        . Separates dependencies definitions from game logic
+    Disadvantages:
+        . Too dependent on scriptable objects
+        . [Inject] attribute goes all over the code, adding dependency to Framework.DI
      */
     public class Installer : MonoInstaller
     {
-        [Install(typeof(IRootState))]
-        [SerializeField] RootState rootStatePrefab;
+        [Install(typeof(IRootModule))]
+        [SerializeField] ModuleSpecification rootModule;
 
         public override void InstallBindings()
         {
-            RecursivelyBind(this);
+            RecursivelyBind(rootModule);
         }
 
-        void RecursivelyBind(MonoBehaviour root) {
-            foreach (FieldInfo field in GetMonobehaviourFields(root))
+        void RecursivelyBind(ScriptableObject root) {
+
+            //Install all dependencies
+            foreach (FieldInfo fieldToInstall in GetFields<MonoBehaviour>(root))
             {
-                var installAttribute = GetInstallAttribute(field);
+                var installAttribute = GetInstallAttribute(fieldToInstall);
                 if (installAttribute != null)
                 {
-                    var value = field.GetValue(root) as MonoBehaviour;
+                    var value = fieldToInstall.GetValue(root) as MonoBehaviour;
                     BindPrefabToContainer(installAttribute, value);
                 }
+            }
 
-                RecursivelyBind(field.GetValue(root) as MonoBehaviour);
+            //Keep binding
+            foreach (FieldInfo moduleSpec in GetFields<ModuleSpecification>(root))
+            {
+                RecursivelyBind(moduleSpec.GetValue(root) as ScriptableObject);
             }
         }
 
-        private FieldInfo[] GetMonobehaviourFields(MonoBehaviour mono)
+        private FieldInfo[] GetFields<T>(object obj)
         {
-            if (mono == null) return new FieldInfo[0];
-            var fields = mono.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (obj == null) return new FieldInfo[0];
+            var fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            return fields.Where(f => typeof(MonoBehaviour).IsAssignableFrom(f.FieldType)).ToArray();
+            return fields.Where(f => typeof(T).IsAssignableFrom(f.FieldType)).ToArray();
         }
 
         private InstallAttribute GetInstallAttribute(FieldInfo field)

@@ -10,6 +10,7 @@ namespace Modules.RootComposition.PokemonGo
     Disadvantages:
         . Too dependent on monobehaviours
         . [Inject] attribute goes all over the code, adding dependency to Framework.DI
+        . Prefab dependencies and game logic goes in the same game state prefab. Which is messy.
     Advantages:
         . Simple
      */
@@ -37,10 +38,10 @@ namespace Modules.RootComposition.PokemonGo
             }
         }
 
-        private FieldInfo[] GetMonobehaviourFields(MonoBehaviour mono)
+        private FieldInfo[] GetMonobehaviourFields(object obj)
         {
-            if (mono == null) return new FieldInfo[0];
-            var fields = mono.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (obj == null) return new FieldInfo[0];
+            var fields = obj.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             return fields.Where(f => typeof(MonoBehaviour).IsAssignableFrom(f.FieldType)).ToArray();
         }

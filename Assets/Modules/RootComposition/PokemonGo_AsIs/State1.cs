@@ -24,5 +24,4 @@ namespace Modules.RootComposition.PokemonGo
             Debug.Log("I'm feature 1 " + gameObject.GetInstanceID());
         }
     }
-
 }
