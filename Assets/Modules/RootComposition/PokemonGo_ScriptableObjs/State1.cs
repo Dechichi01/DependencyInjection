@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Framework.DI;
 
-namespace Modules.RootComposition.PokemonGo
+namespace Modules.RootComposition.PokemonGoScriptableObjs
 {
     public class State1 : RootState
     {
@@ -24,5 +24,5 @@ namespace Modules.RootComposition.PokemonGo
             Debug.Log("I'm feature 1 " + gameObject.GetInstanceID());
         }
     }
-
 }
+

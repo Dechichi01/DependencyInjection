@@ -1,5 +1,5 @@
 ﻿
-namespace Modules.RootComposition.PokemonGo
+namespace Modules.RootComposition.PokemonGoScriptableObjs
 {
     public interface IState2
     {
@@ -7,4 +7,3 @@ namespace Modules.RootComposition.PokemonGo
 
     }
 }
-
