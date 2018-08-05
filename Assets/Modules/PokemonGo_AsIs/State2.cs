@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using Framework.DI;
 
-public class State2 : MonoBehaviour {
+public class State2 : MonoBehaviour, IState2 {
 
-    [Install(typeof(State3))]
     [SerializeField] State3 f3Prefab;
 
     public void Start()

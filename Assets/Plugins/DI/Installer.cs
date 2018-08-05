@@ -29,7 +29,7 @@ namespace Framework.DI
                 if (installAttribute != null)
                 {
                     var value = field.GetValue(root) as MonoBehaviour;
-                    Container.Bind(installAttribute.InstallType).FromComponentInNewPrefab(value).AsSingle();
+                    BindPrefabToContainer(installAttribute, value);
                 }
 
                 RecursivelyBind(field.GetValue(root) as MonoBehaviour);
@@ -49,6 +49,24 @@ namespace Framework.DI
             var attribute = field.GetCustomAttributes(true).FirstOrDefault(a => a is InstallAttribute);
 
             return attribute as InstallAttribute;
+        }
+
+        private void BindPrefabToContainer(InstallAttribute attr, Object prefab)
+        {
+            var binding = Container.Bind(attr.InstallType);
+
+            switch (attr.InstallMethod)
+            {
+                case InstallMethod.Single:
+                    binding.FromComponentInNewPrefab(prefab).AsCached();
+                    break;
+                case InstallMethod.Transient:
+                    binding.FromComponentInNewPrefab(prefab).AsTransient();
+                    break;
+                case InstallMethod.WithId:
+                    binding.WithId(attr.Id).FromComponentInNewPrefab(prefab).AsCached();
+                    break;
+            }
         }
     }
 
