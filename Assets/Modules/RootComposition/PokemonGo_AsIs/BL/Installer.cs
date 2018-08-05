@@ -2,8 +2,9 @@
 using UnityEngine;
 using Zenject;
 using System.Linq;
+using Framework.DI;
 
-namespace Framework.DI
+namespace Modules.RootComposition.PokemonGo
 {
     /*
     Disadvantages:

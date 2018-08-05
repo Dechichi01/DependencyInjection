@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Framework.DI;
+using Modules.RootComposition.PokemonGo;
 
 public class State1 : RootState {
 

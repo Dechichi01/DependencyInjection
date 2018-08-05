@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Framework.DI
+namespace Modules.RootComposition.PokemonGo
 {
     public class RootState : MonoBehaviour, IRootState
     {
